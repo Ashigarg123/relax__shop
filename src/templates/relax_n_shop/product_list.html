@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1 style="text-align:center;">Products</h1>
+<h2 style="color:red;">{{msg}}</h2>
+
+
+
+
+{% for x in object_list %}
+
+<div class="card text-center">
+
+<div class="card" >
+<div class="card text-center">
+  <div class="container" style="width:30%;">
+  <img class="card-img-top" src="{{ x.image.url }}" alt="Card image cap">
+</div>
+<div class="card-body">
+    <h5 class="card-title">{{ x.title }} </h5>
+
+       <a href="/products/{{ x.id}}" class="btn btn-primary">Know more</a>
+     </div>
+
+   </div>
+
+   </div>
+
+   </div>
+
+   {% endfor %}
+
+
+{% endblock %}

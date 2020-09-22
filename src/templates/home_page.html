@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body %}
+          <p>{{ content }}</p>
+          </div>
+          </div>
+          {% if request.user.is_authenticated %}
+          <div class="container"style="background-image:url('https://cdn3.vectorstock.com/i/1000x1000/75/42/people-shopping-and-buying-clothes-and-shoes-set-vector-15767542.jpg');background-repeat:repeat;">
+          <div class="row" style="position: relative; left:300px;">
+          <div class="col">
+
+            <h1> Welcome to relax_n_shop ! </h1>
+            <img src="https://i.pinimg.com/originals/42/30/a6/4230a631755aab86740d4c444230e789.gif" style="width:40%;height:60%;"/>
+          </div>
+        </div>
+
+
+        </div>
+        {%else %}
+        <div class="container" style="position: relative; left:300px;">
+        <a href="{% url 'login' %}">Please login, to continue</a>
+        </div>
+        {% endif %}
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+{% endblock %}

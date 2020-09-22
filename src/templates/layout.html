@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+    <meta charset="utf-8">
+    <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <link href="static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+
+
+    <title>Relax n shop :)</title>
+
+
+
+
+
+<style>
+ body{
+   background-color: lightpink;
+ }
+ .navbar a {
+
+   padding: 12px;
+   color: white;
+   text-decoration: none;
+   font-size: 20px;
+   width: 15%; /* Four links of equal widths */
+   text-align: center;
+ }
+ @media screen and (max-width: 500px) {
+ .navbar a {
+   float: none;
+   display: block;
+   width: 100%;
+   text-align: left;
+ }
+}
+footer {
+  text-align: center;
+  padding: 3px;
+  background-color: DarkSalmon;
+  color: white;
+}
+ </style>
+ </head>
+ <body>
+
+
+
+   <!--Navbar-->
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
+           <div class="container-fluid" style="width: 100%">
+
+
+                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                       <span class="navbar-toggler-icon"></span>
+                   </button>
+                   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                       <div class="navbar-nav">
+                          <h1 class="navbar-text px-3" style="color:white"> Just sit back ,relax n shop !</h1>
+                         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                            {% if user.is_authenticated %}
+    <li class="nav-item active">
+                           <a class="nav-item nav-link active px-3" href="{% url 'home' %}">Home <i class="fa fa-home"></i><span class="sr-only">(current)</span></a>
+                         </li>
+
+                         <li class="nav-item active">
+                                                <a class="nav-item nav-link px-3" href="{% url 'product-list' %}">Products</a>
+                                              </li>
+                                              <li class="nav-item active">
+                                                        <a class="nav-item nav-link px-3" href="{% url 'cart' %}"><i class="fa fa-shopping-cart"style="font-size:36px"></i><span class="navbar-cart-count">{{request.session.cart_items}}</span></a>
+                                                                   </li>
+
+    <li class="nav-item active">
+                           <a class="nav-item nav-link px-3" href="{% url 'contact' %}">Contact <i class="fa fa-envelope"></i></a></li>
+
+
+                                                      <li class="nav-item active">
+                                                        <a class="nav-link px-3" href="{% url 'logout' %}">Logout <i class="fa fa-user-circle"></i></a>
+                                                      </li>
+
+                           {% else %}
+
+
+                                                      <li class="nav-item active">
+                                                        <a class="nav-link px-3" href="{% url 'register' %}">Register </a>
+                                                      </li>
+                           <li class="nav-item active">
+                             <a class="nav-link px-3" href="{% url 'login' %}">Login <i class="fa fa-user-circle"></i></a>
+                           </li>
+                             {% endif %}
+
+                             {% if user.is_superuser %}
+                             <li class="nav-item active">
+                               <a class="nav-link px-3" href="/admin">Admin</a>
+                             </li>
+
+
+
+                             {% endif %}
+
+                                                                   <form>
+                                                                     <h2 style="color:white;"> Search</h2>
+                                                                     <input value="{{ request.GET.si }}" type="text" name="si" />
+                                                                     <input type="submit" value="Search" />
+                                                                     </form>
+
+
+
+   </div>
+                   </div>
+               </nav>
+<hr>
+{% block body %}
+
+       {% endblock %}
+    {% include 'js.html' %}
+<script>
+       $(document).ready(function(){
+       var productForm= $(".form-product-ajax")
+       productForm.submit(function(event){
+       event.preventDefault();
+       console.log("NOTHING'S HAPPENING DUDE!!!")
+       var thisForm=$(this)
+       console.log(thisForm.attr("action"),thisForm.attr("method"))
+       var actionEndpoint = thisForm.attr("action");
+       var httpMethod= thisForm.attr("method");
+       var formData=thisForm.serialize();
+
+       $.ajax({
+           url:actionEndpoint,
+           method:httpMethod,
+           data:formData,
+           success:function(data){
+             console.log("success")
+             console.log(data)
+             console.log("Added", data.added)
+             console.log("Removed", data.removed)
+             var submitSpan=thisForm.find(".submit-span")
+             if(data.added){
+               submitSpan.html("In cart<button type='submit'class='btn btn-link'>Remove?</button>")
+             }
+          else{
+            submitSpan.html("<button type='submit'class='btn btn-success'>Add to cart</button>")
+          }
+          var navbarCount=$(".navbar-cart-count")
+          navbarCount.text(data.cartItemCount)
+          },
+          error:function(errorData){
+       console.log("error")
+       console.log(errorData)
+       }
+
+     })
+       })
+       })
+     </script>
+
+   </body>
+</html>

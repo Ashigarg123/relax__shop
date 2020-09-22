@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class=' mx-auto w-50 p-3'>
+    {% if message %}
+        <div class='text-center'>
+            {{message}}
+        </div>
+    {% endif %}
+    <div class="container" style="border-style: inset;  position: relative; background-color:skyblue;">
+
+      <h1 style="text-align:center;"> Welcome Back!! Login to continue :)</h1>
+      <br>
+<form method="POST" style="text-align:center;"> {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-default" style="text-align:center; background-color:white;">Submit</button>
+  </form>
+  </div>
+  <!---<div class='text-center m-2'>
+          No account yet? <a href="{% url 'register'%}">Sign In</a>
+      </div> -->
+{% endblock %}

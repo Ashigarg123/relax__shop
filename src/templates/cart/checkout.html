@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+    <h2 style="background-color:white;">Order id- {{ object.order_id}}</h2>
+    </div>
+    <div class="col-sm">
+      <h2 style="background-color:white;">Order no.- {{object.cart}}</h2>
+    </div>
+
+  </div>
+</div>
+
+{% if not billing_profile %}
+<div class="row text-center">
+  <div class="col-12 col-md-6">
+    <button class='btn btn-dark'><a href="{% url 'login' %}">Please Login to checkout </a></button>
+    </div>
+  <div class="col-12 col-md-6">
+    Continue as guest? </div>
+    </div>
+  {% else %}
+{% if not object.shipping_address %}
+<div class="container">
+
+
+  <div class='row'>
+
+
+
+<div class="col-md">
+  <p class="lead">Shipping Address</p>
+  <hr/>
+    {% url "checkout_address_create" as checkout_address_create %}
+  {% include 'addresses/form.html' with form=address_form address_type='shipping' next_url=request.build_absolute_uri action_url=checkout_address_create %}
+  </div>
+  <div class="col-md">
+
+  <p class="lead">Reuse Address</p>
+    <hr/>
+  {% url "checkout_address_reuse" as checkout_address_reuse %}
+  {% include 'addresses/reuse_address.html' with address_qs=address_qs  next_url=request.build_absolute_uri address_type='shipping' action_url=checkout_address_reuse %}
+  </div>
+
+</div>
+</div>
+
+{% elif not object.billing_address %}
+
+  <div class="container">
+  <div class='row'>
+
+    <div class="col-md">
+
+          <p class="lead">Billing Address</p>
+          <hr/>
+    {% url "checkout_address_create" as checkout_address_create %}
+  {% include 'addresses/form.html' with form=address_form address_type='billing' next_url=request.build_absolute_uri action_url=checkout_address_create %}
+  </div>
+  <div class="col-md">
+    <!--<p class="lead">Reuse Address</p>
+      <hr/>
+    {% url "checkout_address_reuse" as checkout_address_reuse %}
+  {% include 'addresses/reuse_address.html' with address_qs=address_qs  next_url=request.build_absolute_uri address_type='billing' action_url=checkout_address_reuse %}
+</div>-->
+</div>
+</div>
+{% else %}
+
+  <div class="container">
+  <div class='row'>
+
+    <div class='col-md-6'>
+<h1> Checkout </h1>
+<p>Cart Items: {% for product in object.cart.products.all %}{{product}}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+<p> Shipping address- {{object.shipping_address.get_address }}</p>
+<p> Billing address- {{object.billing_address.get_address }}</p>
+<p> Cart Total- {{object.cart.total}}</p>
+<p >Shipping Total - {{object.shipping_total}}<p>
+<p>Order Total - {{object.total}}</p>
+<form class="form" method='POST' action=''>{% csrf_token %}
+
+<button type="submit" class="btn btn-success">Checkout</button>
+</form>
+</div>
+</div>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

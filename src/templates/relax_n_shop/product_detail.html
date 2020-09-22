@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+<div class="row" style="text-align:center;">
+
+<div class='col-12 col-md-6' style="text-align:center;" >
+<h1>{{ object.title }}</h1>
+<div class="container" style="border-style: inset; ">
+<img src='{{ object.image.url }}' class='img-fluid' style=" height:500px;"/>
+</div>
+<div class="container" style="border-style: inset;  position: relative;background-color:skyblue;">
+<p>Price-{{object.Price}}/-</p>
+<p>{{object.description}}</p>
+<p>Posted on - {{object.cr_date}}</p>
+<p>Time - {{ now|time }}</p>
+</div>
+</div>
+
+  <form class="form-product-ajax"method="POST" action="{% url 'update' %}" class="form">{% csrf_token %}
+    <input type="hidden" name="product_id" value="{{product.id}}"/>
+    <span class="submit-span">
+  {% if product in cart.products.all %}
+  In cart<button type="submit" class="btn btn-link">Remove?</button>
+
+  {% else %}
+
+  <button type="submit"class="btn btn-success">Add to cart</button>
+  </span>
+  {% endif %}
+
+  </form>
+  </div>
+  </div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1 style="text-align:center";> Cart </h1>
+{% if cart.products.exists %}
+
+<table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Sr.no</th>
+      <th scope="col">Product name</th>
+      <th scope="col">Category</th>
+      <th scope="col">Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in cart.products.all %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a href="{% url 'product-detail' product.id%}">{{ product.title}}<a>
+        <div class='col-12 col-md-6'>
+          <form method="POST" action="{% url 'update' %}" class="form">{% csrf_token %}
+            <input type="hidden" name="product_id" value="{{product.id}}"/>
+            {% if in_cart %}
+              <button type="submit" class="btn btn-link" style="padding:0px;cursor:pointer;">Remove?</button>
+              {% else %}
+          {% if product in cart.products.all %}
+          <button type="submit"class="btn btn-link" style="padding:0px;">Remove?</button>
+
+          {% else %}
+<button type="submit"class="btn btn-success">Add to cart</button>
+          {% endif %}
+          {% endif %}
+          </form>
+          </div></td>
+      <td>{{product.category}}</td>
+      <td>{{product.Price}}/-</td>
+    </tr>
+    {% endfor %}
+<tr>
+  <td colspan="3"></td>
+  <td><b>Subtotal- </b>{{cart.subtotal}}/-</td>
+  </tr>
+  <tr>
+    <td colspan="3"></td>
+    <td><b>Total(inclusive of taxes)- </b>{{cart.total}}/-</td></tr>
+    <tr>
+      <td colspan="3"></td>
+      <td><a class="btn btn-lg btn-success" href="{% url 'checkout' %}"> Checkout </a></td>
+      </tr>
+  </tbody>
+</table>
+{% else %}
+<p class="lead">Cart is empty! </p>
+{% endif %}
+{% endblock %}
